@@ -11,4 +11,4 @@ def post_detail(request,id):
         post=Post.published.get(id=id)
     except Post.DoesNotExist:
         raise Http404("No Post found")
-    return render(request,'blog/post/detail.html',{'posts':post})
+    return render(request,'blog/post/detail.html',{'post':post})
