@@ -1,3 +1,4 @@
 my/
 __pycache__/
 *.pyc
+Blog_site/.env
