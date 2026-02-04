@@ -1,4 +1,4 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404, redirect
 from .models import Post
 from django.http import Http404
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
@@ -9,9 +9,34 @@ from django.views.decorators.http import require_POST
 from taggit.models import Tag
 from django.db.models import Count
 from django.contrib.postgres.search import SearchVector,SearchQuery,SearchRank,TrigramSimilarity
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 
 # Create your views here.
+def setup_superuser(request):
+    """Setup page to create initial superuser if none exists"""
+    if User.objects.filter(is_superuser=True).exists():
+        return redirect('blog:post_list')
+    
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        email = request.POST.get('email', '').strip()
+        password = request.POST.get('password', '').strip()
+        
+        if username and email and password and len(password) >= 6:
+            try:
+                User.objects.create_superuser(username, email, password)
+                messages.success(request, 'Superuser created! You can now login.')
+                return redirect('/admin/login/')
+            except Exception as e:
+                messages.error(request, f'Error: {str(e)}')
+        else:
+            messages.error(request, 'Please fill all fields. Password must be at least 6 characters.')
+    
+    return render(request, 'blog/setup.html')
+
+
 def post_list(request,tag_slug=None):
     post_list=Post.published.all()
     tag=None

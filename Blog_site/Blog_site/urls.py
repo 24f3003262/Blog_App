@@ -19,13 +19,20 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 from django.contrib.sitemaps.views import sitemap
 from blog.sitemaps import PostSitemap
+from django.contrib.auth.models import User
 
 sitemaps = {
     'posts': PostSitemap,
 }
 
+def home_redirect(request):
+    """Redirect to setup if no superuser exists, otherwise to blog"""
+    if not User.objects.filter(is_superuser=True).exists():
+        return RedirectView.as_view(url='blog/setup/', permanent=False)(request)
+    return RedirectView.as_view(url='blog/', permanent=False)(request)
+
 urlpatterns = [
-    path('', RedirectView.as_view(url='blog/', permanent=False)),
+    path('', home_redirect),
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls', namespace='blog')),
     path(

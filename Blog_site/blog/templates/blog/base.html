@@ -5,8 +5,37 @@
   <head>
     <title>{% block title %}{% endblock %}</title>
     <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+    <style>
+      .navbar {
+        background-color: #333;
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+      .navbar a, .navbar span {
+        color: white;
+        margin-right: 15px;
+        text-decoration: none;
+      }
+      .navbar a:hover {
+        text-decoration: underline;
+      }
+      .user-section {
+        float: right;
+      }
+    </style>
   </head>
   <body>
+    <div class="navbar">
+      <a href="{% url 'blog:post_list' %}">Home</a>
+      {% if user.is_authenticated %}
+        <span>Welcome, {{ user.username }}!</span>
+        <a href="/admin/">Admin Panel</a>
+        <a href="{% url 'admin:logout' %}">Logout</a>
+      {% else %}
+        <a href="/admin/login/">Login</a>
+      {% endif %}
+    </div>
+
     <div id="content">{% block content %} {% endblock %}</div>
     <div id="sidebar">
       <h2>My blog</h2>
