@@ -15,19 +15,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
+from django.views.generic import RedirectView
 from django.contrib.sitemaps.views import sitemap
 from blog.sitemaps import PostSitemap
-sitemaps={
-    'posts':PostSitemap,
+
+sitemaps = {
+    'posts': PostSitemap,
 }
+
 urlpatterns = [
+    path('', RedirectView.as_view(url='blog/', permanent=False)),
     path('admin/', admin.site.urls),
-    path('blog/',include('blog.urls',namespace='blog')),
+    path('blog/', include('blog.urls', namespace='blog')),
     path(
         'sitemap.xml',
         sitemap,
-        {'sitemaps':sitemaps},
+        {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'
     )
 ]
