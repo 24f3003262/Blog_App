@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 Blog_site/.env
 Blog_site/db.sqlite3
+DEPLOYMENT.md
+.env.example
