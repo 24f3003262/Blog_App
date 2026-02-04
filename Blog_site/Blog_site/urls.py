@@ -25,14 +25,8 @@ sitemaps = {
     'posts': PostSitemap,
 }
 
-def home_redirect(request):
-    """Redirect to setup if no superuser exists, otherwise to blog"""
-    if not User.objects.filter(is_superuser=True).exists():
-        return RedirectView.as_view(url='blog/setup/', permanent=False)(request)
-    return RedirectView.as_view(url='blog/', permanent=False)(request)
-
 urlpatterns = [
-    path('', home_redirect),
+    path('', RedirectView.as_view(url='blog/', permanent=False)),
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls', namespace='blog')),
     path(

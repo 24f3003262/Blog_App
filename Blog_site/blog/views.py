@@ -3,13 +3,15 @@ from .models import Post
 from django.http import Http404
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.views.generic import ListView
-from .forms import EmailPostForm,CommentForm, SearchForm
+from .forms import EmailPostForm,CommentForm, SearchForm, UserRegistrationForm, UserLoginForm
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
 from django.db.models import Count
 from django.contrib.postgres.search import SearchVector,SearchQuery,SearchRank,TrigramSimilarity
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
@@ -135,3 +137,70 @@ def post_search(request):
         'query':query,
         'results':results
     })
+
+
+def homepage(request):
+    """Homepage with welcome message and blog overview"""
+    total_posts = Post.published.count()
+    recent_posts = Post.published.all()[:5]
+    context = {
+        'total_posts': total_posts,
+        'recent_posts': recent_posts,
+    }
+    return render(request, 'blog/homepage.html', context)
+
+
+def register(request):
+    """User registration view"""
+    if request.user.is_authenticated:
+        return redirect('blog:post_list')
+    
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Registration successful! Welcome to the blog.')
+            return redirect('blog:post_list')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+    else:
+        form = UserRegistrationForm()
+    
+    return render(request, 'blog/register.html', {'form': form})
+
+
+def user_login(request):
+    """User login view"""
+    if request.user.is_authenticated:
+        return redirect('blog:post_list')
+    
+    if request.method == 'POST':
+        form = UserLoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, f'Welcome back, {username}!')
+                return redirect('blog:post_list')
+    else:
+        form = UserLoginForm()
+    
+    return render(request, 'blog/login.html', {'form': form})
+
+
+def user_logout(request):
+    """User logout view"""
+    logout(request)
+    messages.success(request, 'You have been logged out.')
+    return redirect('blog:homepage')
+
+
+@login_required(login_url='blog:login')
+def user_profile(request):
+    """User profile page"""
+    return render(request, 'blog/profile.html', {'user': request.user})
