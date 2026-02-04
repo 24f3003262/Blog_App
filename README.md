@@ -42,18 +42,5 @@ My favorite part—bridging Web Dev and Machine Learning (NLP). I replaced basic
 • Trigram Similarity: Implemented fuzzy matching to handle user typos effectively.
 
 
-## Notes to use:-
-
-
-first make a .env file in the root directory (/Blog_site/.env) containing the following lines of code:-
-
-EMAIL_HOST_USER=email@gmail.com
-EMAIL_HOST_PASSWORD=<get your password>
-DEFAULT_FROM_EMAIL=My Blog <email@gmail.com>
-
-the email you use will be used as the smtp host...you need to turn on two step verification for that email (must be gmail) and then turn on app password from [here](https://myaccount.google.com/apppasswords)
-
-
-And then you need to go to Blog_site root directory and open cmd....then type python manage.py migrate. The app will be ready to run
 
 
