@@ -53,4 +53,14 @@ class UserLoginForm(AuthenticationForm):
         })
     )
 
+
+class PostCreateForm(forms.ModelForm):
+    class Meta:
+        from .models import Post
+        model = Post
+        fields = ['title', 'slug', 'body', 'tags', 'status']
+        widgets = {
+            'body': forms.Textarea(attrs={'rows': 6}),
+        }
+
     

@@ -3,7 +3,7 @@ from .models import Post
 from django.http import Http404
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.views.generic import ListView
-from .forms import EmailPostForm,CommentForm, SearchForm, UserRegistrationForm, UserLoginForm
+from .forms import EmailPostForm,CommentForm, SearchForm, UserRegistrationForm, UserLoginForm, PostCreateForm
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
@@ -204,3 +204,24 @@ def user_logout(request):
 def user_profile(request):
     """User profile page"""
     return render(request, 'blog/profile.html', {'user': request.user})
+
+
+@login_required(login_url='blog:login')
+def post_create(request):
+    """Allow authenticated users to create a new post"""
+    if request.method == 'POST':
+        form = PostCreateForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            # default to DRAFT if not provided
+            if not post.status:
+                post.status = Post.Status.DRAFT
+            post.save()
+            # save tags / many-to-many
+            form.save_m2m()
+            messages.success(request, 'Post created successfully.')
+            return redirect(post.get_absolute_url())
+    else:
+        form = PostCreateForm()
+    return render(request, 'blog/post/create.html', {'form': form})

@@ -66,8 +66,8 @@
       <div class="navbar-left">
         <a href="{% url 'blog:homepage' %}" class="nav-logo">📝 My Blog</a>
         <a href="{% url 'blog:post_list' %}">Blog</a>
-        {% if user.is_staff %}
-          <a href="/admin/blog/post/add/" class="user-badge">Create Post</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'blog:post_create' %}" class="user-badge">Create Post</a>
         {% endif %}
       </div>
       <div class="navbar-right">
