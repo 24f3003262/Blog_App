@@ -1,6 +1,6 @@
 # Blog App using Django
 
-Check it out here : https://blog-app-1nb1.onrender.com
+Check it out here : https://blog-app-1nb1.onrender.com (Deployed in render)
 
 ## Mostly made using the Django base templates and functionalities
 
