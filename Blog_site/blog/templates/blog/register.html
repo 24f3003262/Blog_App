@@ -11,30 +11,41 @@
   {% endfor %}
 {% endif %}
 
-<form method="post">
+<form method="post" id="register-form">
   {% csrf_token %}
   {{ form.non_field_errors }}
+  <div class="form-clean">
+    <label for="id_username">Username</label>
+    {{ form.username }}
 
-  <label>Username</label>
-  {{ form.username }}
+    <label for="id_email">Email</label>
+    {{ form.email }}
 
-  <label>Email</label>
-  {{ form.email }}
+    <label for="id_first_name">First name (optional)</label>
+    {{ form.first_name }}
 
-  <label>First name (optional)</label>
-  {{ form.first_name }}
+    <label for="id_last_name">Last name (optional)</label>
+    {{ form.last_name }}
 
-  <label>Last name (optional)</label>
-  {{ form.last_name }}
+    <label for="id_password1">Password</label>
+    {{ form.password1 }}
 
-  <label>Password</label>
-  {{ form.password1 }}
+    <label for="id_password2">Confirm password</label>
+    {{ form.password2 }}
 
-  <label>Confirm password</label>
-  {{ form.password2 }}
-
-  <input type="submit" value="Create Account">
+    <input type="submit" value="Create Account" class="user-badge" id="register-btn">
+  </div>
 </form>
+
+<script>
+  (function(){
+    var form = document.getElementById('register-form');
+    if(!form) return;
+    form.addEventListener('submit', function(){
+      var btn = document.getElementById('register-btn'); if(btn) btn.disabled = true;
+    });
+  })();
+</script>
 
 <p><a href="{% url 'blog:login' %}">Already have an account? Login</a> · <a href="{% url 'blog:homepage' %}">Back to home</a></p>
 

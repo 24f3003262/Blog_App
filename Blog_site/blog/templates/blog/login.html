@@ -11,17 +11,29 @@
   {% endfor %}
 {% endif %}
 
-<form method="post">
+<form method="post" id="login-form">
   {% csrf_token %}
   {{ form.non_field_errors }}
-  <label>Username</label>
-  {{ form.username }}
+  <div class="form-clean">
+    <label for="id_username">Username</label>
+    {{ form.username }}
 
-  <label>Password</label>
-  {{ form.password }}
+    <label for="id_password">Password</label>
+    {{ form.password }}
 
-  <input type="submit" value="Login">
+    <input type="submit" value="Login" class="user-badge" id="login-btn">
+  </div>
 </form>
+
+<script>
+  (function(){
+    var form = document.getElementById('login-form');
+    if(!form) return;
+    form.addEventListener('submit', function(){
+      var btn = document.getElementById('login-btn'); if(btn) btn.disabled = true;
+    });
+  })();
+</script>
 
 <p><a href="{% url 'blog:register' %}">Create an account</a> · <a href="{% url 'blog:homepage' %}">Back to home</a></p>
 

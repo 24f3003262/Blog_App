@@ -4,9 +4,38 @@
 
 {% block content %}
   <h2>Create a new post</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="user-badge">Create</button>
-  </form>
+  <div class="form-clean">
+    <form method="post" id="post-create-form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <!-- render fields individually for better layout -->
+      <label for="id_title">Title</label>
+      {{ form.title }}
+
+      <label for="id_slug">Slug</label>
+      {{ form.slug }}
+
+      <label for="id_body">Body</label>
+      {{ form.body }}
+
+      <label for="id_tags">Tags</label>
+      {{ form.tags }}
+
+      <label for="id_status">Status</label>
+      {{ form.status }}
+
+      <button type="submit" class="user-badge" id="create-post-btn">Create</button>
+    </form>
+  </div>
+
+  <script>
+    (function(){
+      var form = document.getElementById('post-create-form');
+      if(!form) return;
+      form.addEventListener('submit', function(){
+        var btn = document.getElementById('create-post-btn');
+        if(btn){ btn.disabled = true; }
+      });
+    })();
+  </script>
 {% endblock %}

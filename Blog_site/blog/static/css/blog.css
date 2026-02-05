@@ -76,6 +76,49 @@ input[type=submit] {
     font-size:14px;
     text-transform:uppercase; 
 }
+
+/* Improved clean form layout for create/login/register */
+.form-clean label {
+    display:block;
+    float:none;
+    margin-bottom:6px;
+    color:#333;
+}
+.form-clean input,
+.form-clean textarea,
+.form-clean select {
+    display:block;
+    float:none;
+    width:100%;
+    box-sizing:border-box;
+    margin:0 0 12px 0;
+    background:#f6f6f6;
+    border:1px solid #e0e0e0;
+    padding:8px 10px;
+    font-size:14px;
+    border-radius:6px;
+}
+.form-clean { max-width:680px; }
+
+/* Button styling shared across site */
+.user-badge, .btn-primary, input[type=submit], button[type=submit] {
+    display:inline-block;
+    background:#667eea;
+    color:#fff;
+    padding:8px 14px;
+    border-radius:18px;
+    border:0;
+    font-weight:600;
+    text-decoration:none;
+    cursor:pointer;
+}
+.user-badge:hover, .btn-primary:hover, input[type=submit]:hover, button[type=submit]:hover {
+    opacity:0.95;
+}
+.user-badge[disabled], input[type=submit][disabled], button[disabled] {
+    opacity:0.6;
+    cursor:default;
+}
 .errorlist { 
     color:#cc0033;
     float:left;
