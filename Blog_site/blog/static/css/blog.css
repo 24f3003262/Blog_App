@@ -135,8 +135,14 @@ input[type=submit] {
 
 /* ensure navbar link pills align vertically */
 .navbar a.user-badge {
-    padding:6px 16px;
+    /* make navbar create link look like a plain white text link (no pill) */
+    background: transparent;
+    color: #fff;
+    padding: 0 6px;
     margin-left:8px;
+    border-radius: 0;
+    box-shadow: none;
+    font-weight:500;
 }
 .errorlist { 
     color:#cc0033;
